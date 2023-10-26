@@ -1,0 +1,18 @@
+query IsDir($dirPath: String!) {
+  fs {
+    isDir(dirPath: $dirPath) {
+      isDir
+      errorMsg
+    }
+  }
+}
+
+query ReadDir($dirPath: String) {
+  fs {
+    readDir(dirPath: $dirPath) {
+      isDir
+      name
+      path
+    }
+  }
+}

@@ -1,0 +1,18 @@
+query GetConfig {
+  config {
+    AppearanceTheme
+    MaxmumConcurrentRequests
+    DelayBetweenRequests
+    NotePath
+    NoteFilter
+  }
+}
+
+mutation UpdateConfig($key: ConfigKey!, $value: ConfigValue!) {
+  config {
+    updateConfig(key: $key,value: $value) {
+      successful
+      message
+    }
+  }
+}
