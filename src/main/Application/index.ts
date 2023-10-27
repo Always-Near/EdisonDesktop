@@ -8,7 +8,7 @@ import IPCListener from '../IPCListener'
 import { EnvEnum } from '~/config/constant'
 
 class Application {
-  start = () => {
+  start = (options: any) => {
     if (AppConfig.currentEnv() === EnvEnum.dev) {
       app.dock.setIcon(path.join(process.cwd(), 'src/assets/icon/icon_circle.png'))
     }
