@@ -4,7 +4,7 @@ import Config from '../Config'
 import GraphqlServer from '../Graphql'
 
 class IPCListener {
-  registListener() {
+  registerListener() {
     ipcMain.handle(
       RendererInvokeEventName.Graphql,
       (event, params: EventParams[typeof RendererInvokeEventName.Graphql]) => {

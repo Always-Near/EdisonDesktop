@@ -16,7 +16,7 @@ class Application {
   start = (options: SystemOptions) => {
     this.options = options
     this.userDataDir = System.setupUserDataDir(options)
-    IPCListener.registListener()
+    IPCListener.registerListener()
     GraphqlServer.startApolloServer()
     Config.initConfig()
     BrowserWindowManagement.initMainWindow()
