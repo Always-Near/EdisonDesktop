@@ -8,6 +8,15 @@ query GetAppInfo {
   }
 }
 
+mutation ConsoleInspect($message: String) {
+  app {
+    consoleInspect(message: $message) {
+      successful
+      message
+    }
+  }
+}
+
 mutation ClipboardWriteText($text: String!) {
   app {
     clipboardWriteText(text: $text) {

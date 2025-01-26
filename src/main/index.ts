@@ -13,6 +13,15 @@ if (require('electron-squirrel-startup')) {
 
 const options = System.getOptions()
 
+if (!options.devMode) {
+  // for single instance check
+  const otherInstanceRunning = !app.requestSingleInstanceLock()
+  if (otherInstanceRunning) {
+    console.log('Exiting because another instance of the app is already running.')
+    app.exit(1)
+  }
+}
+
 const urlsToOpen: string[] = [...options.urlsToOpen]
 const pathsToOpen: string[] = [...options.pathsToOpen]
 const onOpenUrlBeforeReady = (event: Event, url: string) => {
@@ -34,7 +43,6 @@ app.on('ready', () => {
   app.removeListener('open-url', onOpenUrlBeforeReady)
   Application.start({
     devMode: options.devMode,
-    background: options.background,
     urlsToOpen,
     pathsToOpen
   })

@@ -1,10 +1,7 @@
 query GetConfig {
   config {
     AppearanceTheme
-    MaxmumConcurrentRequests
-    DelayBetweenRequests
-    NotePath
-    NoteFilter
+    Mode
   }
 }
 

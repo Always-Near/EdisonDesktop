@@ -15,7 +15,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  ConfigKey: 'AppearanceTheme' | 'MaxmumConcurrentRequests' | 'DelayBetweenRequests' | 'NotePath' | 'NoteFilter';
+  ConfigKey: 'AppearanceTheme' | 'Mode';
   ConfigValue: string | number | boolean | Date;
   Date: Date;
 };
@@ -23,12 +23,18 @@ export type Scalars = {
 export type AppMutation = {
   __typename?: 'AppMutation';
   clipboardWriteText?: Maybe<MutationResult>;
+  consoleInspect?: Maybe<MutationResult>;
   showMessageBox?: Maybe<MutationResult>;
 };
 
 
 export type AppMutationClipboardWriteTextArgs = {
   text?: InputMaybe<Scalars['String']>;
+};
+
+
+export type AppMutationConsoleInspectArgs = {
+  message?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -59,25 +65,7 @@ export type ConfigMutationUpdateConfigArgs = {
 export type ConfigQuery = {
   __typename?: 'ConfigQuery';
   AppearanceTheme?: Maybe<Scalars['String']>;
-  DelayBetweenRequests?: Maybe<Scalars['Float']>;
-  MaxmumConcurrentRequests?: Maybe<Scalars['Float']>;
-  NoteFilter?: Maybe<Scalars['String']>;
-  NotePath?: Maybe<Scalars['String']>;
-};
-
-export type DictFileQuery = {
-  __typename?: 'DictFileQuery';
-  fileName?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['Int']>;
-  list?: Maybe<Array<Maybe<Scalars['String']>>>;
-  typeId?: Maybe<Scalars['Int']>;
-};
-
-export type DictTypeQuery = {
-  __typename?: 'DictTypeQuery';
-  files?: Maybe<Array<Maybe<DictFileQuery>>>;
-  id?: Maybe<Scalars['Int']>;
-  typeName?: Maybe<Scalars['String']>;
+  Mode?: Maybe<Scalars['String']>;
 };
 
 export type FsIsDirQuery = {
@@ -125,7 +113,6 @@ export type RootQueryType = {
   __typename?: 'RootQueryType';
   app?: Maybe<AppQuery>;
   config?: Maybe<ConfigQuery>;
-  dictType?: Maybe<Array<Maybe<DictTypeQuery>>>;
   fs?: Maybe<FsQuery>;
 };
 
@@ -133,6 +120,13 @@ export type GetAppInfoQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetAppInfoQuery = { __typename?: 'RootQueryType', app?: { __typename?: 'AppQuery', version?: string | null, nodeVersion?: string | null, electronVersion?: string | null, themeMode?: string | null, isDarkMode?: boolean | null } | null };
+
+export type ConsoleInspectMutationVariables = Exact<{
+  message?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type ConsoleInspectMutation = { __typename?: 'RootMutationType', app?: { __typename?: 'AppMutation', consoleInspect?: { __typename?: 'MutationResult', successful?: boolean | null, message?: string | null } | null } | null };
 
 export type ClipboardWriteTextMutationVariables = Exact<{
   text: Scalars['String'];
@@ -151,7 +145,7 @@ export type ShowMessageBoxMutation = { __typename?: 'RootMutationType', app?: { 
 export type GetConfigQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetConfigQuery = { __typename?: 'RootQueryType', config?: { __typename?: 'ConfigQuery', AppearanceTheme?: string | null, MaxmumConcurrentRequests?: number | null, DelayBetweenRequests?: number | null, NotePath?: string | null, NoteFilter?: string | null } | null };
+export type GetConfigQuery = { __typename?: 'RootQueryType', config?: { __typename?: 'ConfigQuery', AppearanceTheme?: string | null, Mode?: string | null } | null };
 
 export type UpdateConfigMutationVariables = Exact<{
   key: Scalars['ConfigKey'];
@@ -187,6 +181,16 @@ export const GetAppInfoDocument = `
   }
 }
     `;
+export const ConsoleInspectDocument = `
+    mutation ConsoleInspect($message: String) {
+  app {
+    consoleInspect(message: $message) {
+      successful
+      message
+    }
+  }
+}
+    `;
 export const ClipboardWriteTextDocument = `
     mutation ClipboardWriteText($text: String!) {
   app {
@@ -211,10 +215,7 @@ export const GetConfigDocument = `
     query GetConfig {
   config {
     AppearanceTheme
-    MaxmumConcurrentRequests
-    DelayBetweenRequests
-    NotePath
-    NoteFilter
+    Mode
   }
 }
     `;
@@ -254,6 +255,9 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
   return {
     GetAppInfo(variables?: GetAppInfoQueryVariables, options?: C): Promise<GetAppInfoQuery> {
       return requester<GetAppInfoQuery, GetAppInfoQueryVariables>(GetAppInfoDocument, variables, options) as Promise<GetAppInfoQuery>;
+    },
+    ConsoleInspect(variables?: ConsoleInspectMutationVariables, options?: C): Promise<ConsoleInspectMutation> {
+      return requester<ConsoleInspectMutation, ConsoleInspectMutationVariables>(ConsoleInspectDocument, variables, options) as Promise<ConsoleInspectMutation>;
     },
     ClipboardWriteText(variables: ClipboardWriteTextMutationVariables, options?: C): Promise<ClipboardWriteTextMutation> {
       return requester<ClipboardWriteTextMutation, ClipboardWriteTextMutationVariables>(ClipboardWriteTextDocument, variables, options) as Promise<ClipboardWriteTextMutation>;

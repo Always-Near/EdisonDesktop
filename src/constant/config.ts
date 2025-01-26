@@ -5,8 +5,15 @@ export const ConfigScope = {
   Account: 1
 } as const
 
+export const ModeEnum = {
+  List: 'list',
+  Split: 'split',
+  SplitV: 'split-v'
+} as const
+
 export const ConfigKeys = {
-  AppearanceTheme: 'AppearanceTheme'
+  AppearanceTheme: 'AppearanceTheme',
+  Mode: 'Mode'
 } as const
 
 export const ConfigValueType = {
@@ -21,6 +28,12 @@ export const ConfigSchema = {
     key: 'AppearanceTheme',
     type: ConfigValueType.String,
     defaultValue: ThemeMode.AUTO,
+    scope: ConfigScope.Global
+  },
+  [ConfigKeys.Mode]: {
+    key: 'Mode',
+    type: ConfigValueType.String,
+    defaultValue: ModeEnum.List,
     scope: ConfigScope.Global
   }
 } as const
